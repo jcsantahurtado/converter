@@ -9,17 +9,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import co.com.conversor.model.Conversion;
+import co.com.conversor.model.Operacion;
 
 public class ConversorController {
 
 	int id;
-	Conversion conversion;
+	Operacion conversion;
 	double cantAConvertir;
 	double resultado;
 
-	public ConversorController(int id, Conversion conversion, double cantAConvertir) {
-		super();
+	public ConversorController(int id, Operacion conversion, double cantAConvertir) {
 		this.id = id;
 		this.conversion = conversion;
 		this.cantAConvertir = cantAConvertir;
@@ -87,9 +86,11 @@ public class ConversorController {
 	public String getResultado() {
 
 		if (this.id == 1) {
+
 			lanzarConversorMoneda();
 
 		} else {
+
 			lanzarConversorTemperatura();
 
 		}

@@ -3,21 +3,19 @@ package co.com.conversor.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Conversion {
+public class Operacion {
 
 	private String convertirDe; // Example: USD
 	private String convertirA; // Example: COP
-
 	private String descripcion;
-
 	private static List<Object> opcionesEnGeneral = new ArrayList<>();
 
-	public Conversion(Convertidor moneda, Convertidor otraMoneda) {
-		super();
+	public Operacion(OpcionConversor moneda, OpcionConversor otraMoneda) {
+
 		this.convertirDe = moneda.getCodigo();
 		this.convertirA = otraMoneda.getCodigo();
 		this.descripcion = "De " + moneda.getNombre() + " a " + otraMoneda.getNombre();
-		Conversion.opcionesEnGeneral.add(this.descripcion);
+		Operacion.opcionesEnGeneral.add(this.descripcion);
 
 	}
 
@@ -35,6 +33,10 @@ public class Conversion {
 
 	public static List<Object> getOpcionesEnGeneral() {
 		return opcionesEnGeneral;
+	}
+
+	public static void setOpcionesEnGeneral(List<Object> opcionesEnGeneral) {
+		Operacion.opcionesEnGeneral = opcionesEnGeneral;
 	}
 
 }

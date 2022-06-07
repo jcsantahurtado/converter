@@ -2,15 +2,14 @@ package co.com.conversor.model;
 
 import java.util.List;
 
-public class Convertidor {
+public class OpcionConversor {
 
 	private String codigo;
 	private String nombre;
 
-	private List<Conversion> listaConversiones;
+	private List<Operacion> listaConversiones;
 
-	public Convertidor(String codigo, String nombre) {
-		super();
+	public OpcionConversor(String codigo, String nombre) {
 		this.codigo = codigo;
 		this.nombre = nombre;
 	}
@@ -23,11 +22,11 @@ public class Convertidor {
 		return nombre;
 	}
 
-	public List<Conversion> getListaConversiones() {
+	public List<Operacion> getListaConversiones() {
 		return listaConversiones;
 	}
 
-	public void setListaConversiones(List<Conversion> listaConversiones) {
+	public void setListaConversiones(List<Operacion> listaConversiones) {
 		this.listaConversiones = listaConversiones;
 	}
 

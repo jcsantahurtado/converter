@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
-import co.com.conversor.model.Conversion;
-import co.com.conversor.model.Convertidor;
+import co.com.conversor.model.Operacion;
+import co.com.conversor.model.OpcionConversor;
 import co.com.conversor.controller.ConversorController;
 
 public class Programa {
@@ -28,11 +28,9 @@ public class Programa {
 
 			Object selectedConversor = messageOptions(conversores, "Seleccione una opción de conversión", "Menú");
 
-			double cantAConvertir = .0;
-
 			try {
 
-				cantAConvertir = Double.parseDouble(messageInput());
+				double cantAConvertir = Double.parseDouble(messageInput());
 
 				if (selectedConversor == "Conversor de Moneda") {
 
@@ -60,45 +58,47 @@ public class Programa {
 
 	}
 
-	private List<Convertidor> establecerOpcionesMoneda() {
+	private List<OpcionConversor> establecerOpcionesMoneda() {
 
-		List<Convertidor> monedas = new ArrayList<Convertidor>();
+		List<OpcionConversor> monedas = new ArrayList<>();
 
-		monedas.add(new Convertidor("COP", "Peso Colombiano"));
-		monedas.add(new Convertidor("USD", "Dólar"));
-		monedas.add(new Convertidor("EUR", "Euros"));
-		monedas.add(new Convertidor("GBP", "Libras Esterlinas"));
-		monedas.add(new Convertidor("JPY", "Yen Japonés"));
-		monedas.add(new Convertidor("KRW", "Won sur-coreano"));
+		monedas.add(new OpcionConversor("COP", "Peso Colombiano"));
+		monedas.add(new OpcionConversor("USD", "Dólar"));
+		monedas.add(new OpcionConversor("EUR", "Euros"));
+		monedas.add(new OpcionConversor("GBP", "Libras Esterlinas"));
+		monedas.add(new OpcionConversor("JPY", "Yen Japonés"));
+		monedas.add(new OpcionConversor("KRW", "Won sur-coreano"));
 
 		return monedas;
 
 	}
 
-	private List<Convertidor> establecerOpcionesTemperatura() {
+	private List<OpcionConversor> establecerOpcionesTemperatura() {
 
-		List<Convertidor> temperaturas = new ArrayList<Convertidor>();
+		List<OpcionConversor> temperaturas = new ArrayList<>();
 
-		temperaturas.add(new Convertidor("C", "Celsius"));
-		temperaturas.add(new Convertidor("F", "Fahrenheit"));
-		temperaturas.add(new Convertidor("K", "Kelvin"));
+		temperaturas.add(new OpcionConversor("C", "Celsius"));
+		temperaturas.add(new OpcionConversor("F", "Fahrenheit"));
+		temperaturas.add(new OpcionConversor("K", "Kelvin"));
 
 		return temperaturas;
 
 	}
 
-	private List<Convertidor> cargarConversores(List<Convertidor> opciones) {
+	private List<OpcionConversor> cargarConversores(List<OpcionConversor> opciones) {
 
-		for (Convertidor opcion : opciones) {
+		Operacion.setOpcionesEnGeneral(new ArrayList<>());
 
-			List<Conversion> opcionesPorMoneda = new ArrayList<>();
+		for (OpcionConversor opcion : opciones) {
 
-			for (Convertidor opcion2 : opciones) {
+			List<Operacion> opcionesPorMoneda = new ArrayList<>();
 
-				boolean esIgual = (opcion == opcion2);
+			for (OpcionConversor otraOpcion : opciones) {
+
+				boolean esIgual = (opcion == otraOpcion);
 				if (!esIgual) {
 
-					opcionesPorMoneda.add(new Conversion(opcion, opcion2));
+					opcionesPorMoneda.add(new Operacion(opcion, otraOpcion));
 
 				}
 			}
@@ -111,20 +111,22 @@ public class Programa {
 
 	}
 
-	private void hacerConversion(List<Convertidor> establecerOpciones, double cantAConvertir, int idConversor) {
+	private void hacerConversion(List<OpcionConversor> establecerOpciones, double cantAConvertir, int idConversor) {
 
-		List<Convertidor> opcionesConversor = cargarConversores(establecerOpciones);
-		Optional<Conversion> conversion = null;
-		Object[] opciones = Conversion.getOpcionesEnGeneral().toArray();
+		List<OpcionConversor> opcionesConversor = cargarConversores(establecerOpciones);
+		Optional<Operacion> conversion = null;
+		Object[] opciones = Operacion.getOpcionesEnGeneral().toArray();
 		Object selectedMonedaIntercambio = messageOptions(opciones, "Elije una opción", "Conversores");
 
-		for (Convertidor opcionConversor : opcionesConversor) {
+		for (OpcionConversor opcionConversor : opcionesConversor) {
 
 			conversion = opcionConversor.getListaConversiones().stream()
 					.filter(conv -> conv.getDescripcion() == selectedMonedaIntercambio).findFirst();
 
 			if (!conversion.isEmpty()) {
+
 				break;
+
 			}
 		}
 
