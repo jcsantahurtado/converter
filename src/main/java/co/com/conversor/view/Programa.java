@@ -18,6 +18,48 @@ public class Programa {
 
 	}
 
+	private void presentarMenu() {
+
+		Object[] conversores = { "Conversor de Moneda", "Conversor de Temperatura" };
+
+		int respuesta = 0;
+
+		do {
+
+			Object selectedConversor = messageOptions(conversores, "Seleccione una opción de conversión", "Menú");
+
+			double cantAConvertir = .0;
+
+			try {
+
+				cantAConvertir = Double.parseDouble(messageInput());
+
+				if (selectedConversor == "Conversor de Moneda") {
+
+					hacerConversion(establecerOpcionesMoneda(), cantAConvertir, 1);
+
+				} else {
+
+					hacerConversion(establecerOpcionesTemperatura(), cantAConvertir, 2);
+
+				}
+
+			} catch (Exception e) {
+
+				messageError();
+
+			}
+
+			respuesta = messageDecision();
+
+		}
+
+		while (respuesta == 0);
+
+		messageInfo("Programa terminado");
+
+	}
+
 	private List<Convertidor> establecerOpcionesMoneda() {
 
 		List<Convertidor> monedas = new ArrayList<Convertidor>();
@@ -45,78 +87,40 @@ public class Programa {
 
 	}
 
-	private List<Convertidor> cargarConversores(List<Convertidor> monedas) {
+	private List<Convertidor> cargarConversores(List<Convertidor> opciones) {
 
-		for (Convertidor moneda : monedas) {
+		for (Convertidor opcion : opciones) {
 
 			List<Conversion> opcionesPorMoneda = new ArrayList<>();
-			for (Convertidor moneda2 : monedas) {
 
-				boolean esIgual = (moneda == moneda2);
+			for (Convertidor opcion2 : opciones) {
+
+				boolean esIgual = (opcion == opcion2);
 				if (!esIgual) {
 
-					opcionesPorMoneda.add(new Conversion(moneda, moneda2));
+					opcionesPorMoneda.add(new Conversion(opcion, opcion2));
 
 				}
 			}
 
-			moneda.setListaConversiones(opcionesPorMoneda);
+			opcion.setListaConversiones(opcionesPorMoneda);
 
 		}
 
-		return monedas;
+		return opciones;
 
 	}
 
-	private void presentarMenu() {
+	private void hacerConversion(List<Convertidor> establecerOpciones, double cantAConvertir, int idConversor) {
 
-		Object[] conversores = { "Conversor de Moneda", "Conversor de Temperatura" };
-
-		int respuesta = 0;
-
-		do {
-
-			Object selectedConversor = messageOptions(conversores, "Seleccione una opción de conversión", "Menú");
-
-			double cantAConvertir = .0;
-			boolean esValido = false;
-
-			try {
-				cantAConvertir = Double.parseDouble(messageInput());
-				esValido = true;
-			} catch (Exception e) {
-				messageError();
-			}
-
-			if (selectedConversor == "Conversor de Moneda" && esValido) {
-
-				hacerConversion(establecerOpcionesMoneda(), cantAConvertir, 1);
-
-			} else if (esValido) {
-
-				hacerConversion(establecerOpcionesTemperatura(), cantAConvertir, 2);
-
-			}
-
-			respuesta = messageDecision();
-
-		}
-
-		while (respuesta == 0);
-
-		messageInfo("Programa terminado");
-
-	}
-
-	private void hacerConversion(List<Convertidor> establecerOpcionesMoneda, double cantAConvertir, int idConversor) {
-
-		List<Convertidor> monedas = cargarConversores(establecerOpcionesMoneda);
+		List<Convertidor> opcionesConversor = cargarConversores(establecerOpciones);
 		Optional<Conversion> conversion = null;
 		Object[] opciones = Conversion.getOpcionesEnGeneral().toArray();
 		Object selectedMonedaIntercambio = messageOptions(opciones, "Elije una opción", "Conversores");
 
-		for (Convertidor moneda : monedas) {
-			conversion = moneda.getListaConversiones().stream()
+		for (Convertidor opcionConversor : opcionesConversor) {
+
+			conversion = opcionConversor.getListaConversiones().stream()
 					.filter(conv -> conv.getDescripcion() == selectedMonedaIntercambio).findFirst();
 
 			if (!conversion.isEmpty()) {
